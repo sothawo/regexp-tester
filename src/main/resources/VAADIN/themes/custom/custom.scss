@@ -1,0 +1,13 @@
+@import "../valo/valo";
+@mixin custom {
+    @include valo;
+
+    .error {
+        background: red;
+    }
+
+    .ok {
+        background: limegreen;
+    }
+}
+@include custom;
