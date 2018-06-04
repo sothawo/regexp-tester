@@ -1,6 +1,5 @@
 package com.sothawo.regexptester
 
-import com.vaadin.annotations.Push
 import com.vaadin.annotations.Theme
 import com.vaadin.data.HasValue
 import com.vaadin.server.VaadinRequest
@@ -15,7 +14,6 @@ import java.util.regex.Pattern
  * @author P.J. Meisch (pj.meisch@sothawo.com)
  */
 @SpringUI
-@Push
 @Theme("custom")
 class MainUI : UI() {
 
@@ -28,7 +26,6 @@ class MainUI : UI() {
     val patternChangeHandler: (HasValue.ValueChangeEvent<String>) -> Unit = { evt ->
         run {
             val newPattern = evt.value
-            LOG.info("new pattern: $newPattern")
             regExp.removeStyleNames("ok", "error")
             try {
                 pattern = Pattern.compile(newPattern)
@@ -49,9 +46,7 @@ class MainUI : UI() {
 
     private val testString = TextField("string to test:", { evt ->
         run {
-            val newValue = evt.value
-            LOG.info("new string: $newValue")
-            stringValue = newValue
+            stringValue = evt.value
             checkPattern()
         }
     }).apply {
@@ -81,13 +76,11 @@ class MainUI : UI() {
         var newGroups = groupsPrefix
         testString.removeStyleNames("error", "ok")
         pattern?.matcher(stringValue ?: "")?.let {
-            LOG.info("checking pattern")
             if (it.matches()) {
                 testString.addStyleName("ok")
                 for (group in 0..it.groupCount())
                     newGroups += "group $group: ${it.group(group)} <br/>"
-            } else
-            {
+            } else {
                 testString.addStyleName("error")
             }
 
